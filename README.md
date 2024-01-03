@@ -84,9 +84,200 @@ Pre-FETCH and pass the cached data to children components:
   );
 }
 
+you can also pre-fetch on the current page by traditional way:
 
+  const { data, isPending } = useQuery({
+    queryKey: ['charts'],
+    queryFn: () => getChartsDataAction(),
+  });
+
+  
+  if (isPending) return <h2 className='text-xl font-medium'>Please wait...</h2>;
+  if (!data || data.length < 1) return null;
+
+
+
+
+
+  
+
+
+---------------------------------------
+
+you can also specify the id:
+
+  await queryClient.prefetchQuery({
+    queryKey: ['job', params.id],
+    queryFn: () => getSingleJobAction(params.id),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <EditJobForm jobId={params.id} />
+    </HydrationBoundary>
+  );
+
+and select spcific Job Page 
+
+=---------------------------------------------------
+
+    let params = new URLSearchParams(defaultParams);
+
+
+
+  
 
 ----------------------------------
+
+how to use Mutate in React Query:
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: CreateAndEditJobType) => createJobAction(values),
+    onSuccess: (data) => {
+      if (!data) {
+        toast({
+          description: 'there was an error',
+        });
+        return;
+      }
+      toast({ description: 'job created' });
+      queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      queryClient.invalidateQueries({ queryKey: ['charts'] });
+
+      router.push('/jobs');
+      // form.reset();
+    },
+  });
+
+
+  -----------------------------------------------
+
+
+  1. set name as "mutate" for Functions
+  2. use the mutate inside the return bracket:
+
+  3. function DeleteJobBtn({ id }: { id: string }) {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (id: string) => deleteJobAction(id),
+    onSuccess: (data) => {
+      if (!data) {
+        toast({
+          description: 'there was an error',
+        });
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      queryClient.invalidateQueries({ queryKey: ['charts'] });
+
+      toast({ description: 'job removed' });
+    },
+  });
+  return (
+    <Button
+      size='sm'
+      disabled={isPending}
+      onClick={() => {
+        mutate(id);
+      }}
+    >
+      {isPending ? 'deleting...' : 'delete'}
+    </Button>
+  );
+}
+
+----------------------------------------------
+
+how to make PERSIST using Zod and Actions:
+
+function CreateJobForm() {
+  // 1. Define your form.
+  const form = useForm<CreateAndEditJobType>({
+    resolver: zodResolver(createAndEditJobSchema),
+    defaultValues: {
+      position: '',
+      company: '',
+      location: '',
+      status: JobStatus.Pending,
+      mode: JobMode.FullTime,
+    },
+  });
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: CreateAndEditJobType) => createJobAction(values),
+    onSuccess: (data) => {
+      if (!data) {
+        toast({
+          description: 'there was an error',
+        });
+        return;
+      }
+      toast({ description: 'job created' });
+      queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      queryClient.invalidateQueries({ queryKey: ['charts'] });
+
+      router.push('/jobs');
+      // form.reset();
+    },
+  });
+
+  function onSubmit(values: CreateAndEditJobType) {
+    mutate(values);
+  }
+  return (
+    <Form {...form}>
+
+
+    -----------------------------------------
+
+how to pass down data to Child 
+and then how Child can use the date to fetch data 
+
+<PARENT>
+async function AllJobsPage() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['jobs', '', 'all', 1],
+    queryFn: () => getAllJobsAction({}),
+  });
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <SearchForm />
+      <JobsList />
+    </HydrationBoundary>
+  );
+}
+</PARENT> 
+
+<CHILD>
+function JobsList() {
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get('search') || '';
+  const jobStatus = searchParams.get('jobStatus') || 'all';
+
+  const pageNumber = Number(searchParams.get('page')) || 1;
+
+  const { data, isPending } = useQuery({
+    queryKey: ['jobs', search ?? '', jobStatus, pageNumber],
+    queryFn: () => getAllJobsAction({ search, jobStatus, page: pageNumber }),
+  });
+  const jobs = data?.jobs || [];
+  const count = data?.count || 0;
+  </CHILD> 
+
+  
+
+
+    
+
 
  
       
