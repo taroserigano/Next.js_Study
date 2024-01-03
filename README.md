@@ -311,7 +311,22 @@ console.log(searchParams.has("topic")); // true
 ------------------------------------------------
   
 
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let params = new URLSearchParams();
 
+    const formData = new FormData(e.currentTarget);
+    const search = formData.get('search') as string;
+    const jobStatus = formData.get('jobStatus') as string;
+    params.set('search', search);
+    params.set('jobStatus', jobStatus);
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+
+
+  ------------------------------------------
     
 
 
