@@ -21,6 +21,15 @@ cacheTime: 0 // will make disable caching
 
 staleTime - will give a little pause by NOT refetching everytime fetching occurs so that the web won't suffer from loading constantly. 
 
+-----------------------------
+
+    <HydrationBoundary state={dehydrate(queryClient)}>
+- will make sure to output the previously fetched data
+- and NOT the updated data - avoids confusion this way 
+
+
+This is useful for passing prefetched queries from server to client or persisting queries to localStorage or other persistent locations. It only includes currently successful queries by default.
+
 
       
 
