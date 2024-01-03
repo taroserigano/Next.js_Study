@@ -273,6 +273,42 @@ function JobsList() {
   const count = data?.count || 0;
   </CHILD> 
 
+
+
+-----------------------------------
+
+
+
+
+
+ const pathname = usePathname();
+
+usePathname returns a string of the current URL's pathname. For example:
+
+URL	Returned value
+/	'/'
+/dashboard	'/dashboard'
+/dashboard?v=2	'/dashboard'
+/blog/hello-world	'/blog/hello-world'
+
+
+
+    let params = new URLSearchParams();
+
+- will output the queries
+-like name=john 
+
+const paramsString = "q=URLUtils.searchParams&topic=api";
+const searchParams = new URLSearchParams(paramsString);
+
+// Iterating the search parameters
+for (const p of searchParams) {
+  console.log(p);
+}
+
+console.log(searchParams.has("topic")); // true
+
+------------------------------------------------
   
 
 
