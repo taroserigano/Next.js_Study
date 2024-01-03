@@ -69,6 +69,23 @@ Here are some tips for using queryClient.prefetchQuery:
 Wrap queryClient.prefetchQuery in an if statement and not call it instead
 setQueriesData is a synchronous function that can be used to immediately update cached data of multiple queries
 
+
+Pre-FETCH and pass the cached data to children components:
+
+  await queryClient.prefetchQuery({
+    queryKey: ['jobs', '', 'all', 1],
+    queryFn: () => getAllJobsAction({}),
+  });
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <SearchForm />
+      <JobsList />
+    </HydrationBoundary>
+  );
+}
+
+
+
 ----------------------------------
 
  
