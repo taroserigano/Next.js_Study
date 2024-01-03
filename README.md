@@ -30,7 +30,46 @@ staleTime - will give a little pause by NOT refetching everytime fetching occurs
 
 This is useful for passing prefetched queries from server to client or persisting queries to localStorage or other persistent locations. It only includes currently successful queries by default.
 
+--------------------------------------
 
+Hydration
+ is the process of using client-side
+ JavaScript to add application state and interactivity
+ to server-rendered HTML. It's a feature of React
+, one of the underlying tools that make the Gatsby
+ framework
+.
+React Query supports prefetching
+ multiple queries on the server in Remix and then dehydrating those queries to the queryClient. HydrationBoundary adds a previously dehydrated state into the queryClient that would be returned by useQueryClient(). If the client already contains data, the new queries will be intelligently merged based on update timestamp
+.
+To use HydrationBoundary, you first need to import it from React Query:
+import { HydrationBoundary } from 'react-query';
+Use code with caution.
+Learn more
+Then, you can wrap your app in a HydrationBoundary component:
+<HydrationBoundary>
+  <YourApp />
+</HydrationBoundary>
+Use code with caution.
+Learn more
+This will tell React Query to hydrate
+ the state of your app on the client.
+
+ ----------------------------------------------
+
+ QueryClient.prefetchQuery 
+ 
+ -is a function in React Query that adds data to the cache automatically, and can show while re-fetching.
+
+QueryClient.prefetchQuery is a function in React Query that adds data to the cache automatically, and can show while re-fetching. Prefetching can be used to manually prime or fetch data before a user queries it. This can improve the user experience and reduce waste time. 
+One key difference between prefetchQuery and useQuery is that useQuery will re-execute whenever the cache is used. 
+Here are some tips for using queryClient.prefetchQuery: 
+Wrap queryClient.prefetchQuery in an if statement and not call it instead
+setQueriesData is a synchronous function that can be used to immediately update cached data of multiple queries
+
+----------------------------------
+
+ 
       
 
 
