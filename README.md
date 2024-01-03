@@ -61,6 +61,8 @@ This will tell React Query to hydrate
  
  -is a function in React Query that adds data to the cache automatically, and can show while re-fetching.
 
+  It can be used to fetch something before you render it so that you can see the data instantly once the user navigates to it. If you wait until useQuery tries to read the data, you will inevitably fetch later and thus see a loading spinner.
+
 QueryClient.prefetchQuery is a function in React Query that adds data to the cache automatically, and can show while re-fetching. Prefetching can be used to manually prime or fetch data before a user queries it. This can improve the user experience and reduce waste time. 
 One key difference between prefetchQuery and useQuery is that useQuery will re-execute whenever the cache is used. 
 Here are some tips for using queryClient.prefetchQuery: 
