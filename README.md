@@ -1,3 +1,15 @@
+NEXT.JS 
+
+Refer to the Next 14 Giov folder Read Me 
+
+
+
+
+
+
+
+
+
 React-Query__
 queryKey: ["todos", {searchTerm}] // second param is for specific search
 
